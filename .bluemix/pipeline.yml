@@ -29,7 +29,7 @@ stages:
     script: |-
       #!/bin/bash
       cf create-service cloudantNoSQLDB Lite sample-node-red-cloudantNoSQLDB
-      cf create-service cloud-object-storage Lite bridge-app-object-store
+      cf create-service cloud-object-storage Lite bridge-app-object-store -c '{"HMAC":true}'
       cf create-service watson_vision_combined lite bridge-app-watson-vr
       cf push "${CF_APP}"
       # View logs
