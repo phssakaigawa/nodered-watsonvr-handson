@@ -8,3 +8,6 @@ declared-services:
   sample-node-red-cloudantNoSQLDB:
     label: cloudantNoSQLDB
     plan:  Lite
+  visual-recognition-service:
+    label: visual-recognition
+    plan: Lite
