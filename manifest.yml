@@ -16,4 +16,4 @@ declared-services:
     plan:  Lite
   bridge-app-watson-vr:
     label: watson_vision_combined
-    plan:  Lite
+    plan:  lite

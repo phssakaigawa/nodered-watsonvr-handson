@@ -1,1 +1,212 @@
-[{"id":"b1b11140.4e4ef","type":"inject","name":"","topic":"","payload":"Hello Node-RED!","payloadType":"string","repeat":"","crontab":"","once":false,"x":141,"y":61,"z":"a09be5e0.5f6418","wires":[["f2f2649a.0d0d98"]]},{"id":"f2f2649a.0d0d98","type":"debug","name":"","active":true,"console":"false","complete":"false","x":401,"y":87,"z":"a09be5e0.5f6418","wires":[]}]
+[
+    {
+        "id": "bacc0887.bee178",
+        "type": "cos-put",
+        "z": "37c5c041.d870e",
+        "name": "",
+        "bucket": "tetete-donotdelete-pr-0sjtrqbjiqznak",
+        "objectname": "",
+        "mode": "0",
+        "filepath": "/tmp/",
+        "filename": "test",
+        "contentType": "image/jpeg",
+        "geturl": true,
+        "cosconfig": "1aff12e9.44ed3d",
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "b8b6ec59.61763"
+            ]
+        ]
+    },
+    {
+        "id": "8d6e0972.209b68",
+        "type": "template",
+        "z": "37c5c041.d870e",
+        "name": "写真アップロード",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<html>\n<head><title>Watson Visual Recognition on IBMCloud Node-RED</title></head>\n<body>\n<h1>Watson Visual Recognition on IBMCloud Node-RED</h1>\n<h2>Select an image file</h2>\n<form  action=\"/imgpost\" method=\"post\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"imagedata\" accept=\"image/*\"  />\n    <input type=\"submit\" value=\"Analyze\"/>\n</form>\n</body>\n</html>",
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "8de3e92e.495a58"
+            ]
+        ]
+    },
+    {
+        "id": "c36cd95c.d1d608",
+        "type": "http in",
+        "z": "37c5c041.d870e",
+        "name": "[GET] /imgpost",
+        "url": "/imgpost",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 209.5,
+        "y": 126,
+        "wires": [
+            [
+                "8d6e0972.209b68"
+            ]
+        ]
+    },
+    {
+        "id": "8de3e92e.495a58",
+        "type": "http response",
+        "z": "37c5c041.d870e",
+        "name": "http response",
+        "statusCode": "",
+        "headers": {},
+        "x": 619.5,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3e17371d.898448",
+        "type": "httpInMultipart",
+        "z": "37c5c041.d870e",
+        "name": "[multipart]/imgpost",
+        "url": "/imgpost",
+        "method": "post",
+        "fields": "[ { \"name\": \"imagedata\"} ]",
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 320,
+        "wires": [
+            [
+                "4994c12a.c0419"
+            ]
+        ]
+    },
+    {
+        "id": "4994c12a.c0419",
+        "type": "function",
+        "z": "37c5c041.d870e",
+        "name": "ファイルパスの変換",
+        "func": "msg.filename = msg.req.files['imagedata'][0]['filename'];\nmsg.filepath = msg.req.files['imagedata'][0]['destination']+'/';\nmsg.geturl = Boolean(true);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 380,
+        "wires": [
+            [
+                "bacc0887.bee178"
+            ]
+        ]
+    },
+    {
+        "id": "cd3f4e79.531c7",
+        "type": "visual-recognition-v3",
+        "z": "37c5c041.d870e",
+        "name": "",
+        "apikey": "__PWRD__",
+        "vr-service-endpoint": "https://gateway-a.watsonplatform.net/visual-recognition/api",
+        "image-feature": "detectFaces",
+        "lang": "ja",
+        "x": 588.5,
+        "y": 576,
+        "wires": [
+            [
+                "22c16b1f.66cc84"
+            ]
+        ]
+    },
+    {
+        "id": "b8b6ec59.61763",
+        "type": "function",
+        "z": "37c5c041.d870e",
+        "name": "Call WatsonVR",
+        "func": "msg.payload=msg.url;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 581.5,
+        "y": 497,
+        "wires": [
+            [
+                "41cf67dd.9d9b28"
+            ]
+        ]
+    },
+    {
+        "id": "41cf67dd.9d9b28",
+        "type": "http request",
+        "z": "37c5c041.d870e",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "url": "",
+        "tls": "",
+        "x": 569.5,
+        "y": 538,
+        "wires": [
+            [
+                "cd3f4e79.531c7"
+            ]
+        ]
+    },
+    {
+        "id": "22c16b1f.66cc84",
+        "type": "function",
+        "z": "37c5c041.d870e",
+        "name": "add header",
+        "func": "msg.headers = {\"content-type\":\"text/html\"};\nmsg.payload =msg.result;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 327.5,
+        "y": 654,
+        "wires": [
+            [
+                "dd173192.ef957"
+            ]
+        ]
+    },
+    {
+        "id": "dd173192.ef957",
+        "type": "template",
+        "z": "37c5c041.d870e",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n    {{#faces}}\n        <br><b>年齢</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Max</th><th>Min</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#age}}\n                    <tr><td>{{max}}</td><td>{{min}}</td><td>{{score}}</td></tr>\n                {{/age}} \n            </tbody>\n        </table>\n        <br><b>性別</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Gender</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#gender}}\n                    <tr><td>{{gender}}</td><td>{{score}}</td></tr>\n                {{/gender}} \n            </tbody>\n        </table>\n        <br><b>該当者</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Name</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#identity}}\n                    <tr><td>{{name}}</td><td>{{score}}</td></tr>\n                {{/identity}} \n            </tbody>\n        </table>\n    {{/faces}}\n    {{/images}}    \n{{/result}}",
+        "output": "str",
+        "x": 596.5,
+        "y": 665,
+        "wires": [
+            [
+                "52d566c.037f198"
+            ]
+        ]
+    },
+    {
+        "id": "52d566c.037f198",
+        "type": "http response",
+        "z": "37c5c041.d870e",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610.5,
+        "y": 848,
+        "wires": []
+    },
+    {
+        "id": "1aff12e9.44ed3d",
+        "type": "cos-config",
+        "z": "",
+        "apiKeyId": "",
+        "location": "us-geo",
+        "ibmAuthEndpoint": "https://iam.ng.bluemix.net/oidc/token",
+        "endpoint": "s3-api.us-geo.objectstorage.softlayer.net",
+        "serviceInstanceId": "ServiceId-d",
+        "hmac": true,
+        "accesskeyid": "0a52feda5",
+        "accesskey": "51f1d828c5",
+        "name": "test"
+    }
+]
