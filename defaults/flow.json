@@ -1,10 +1,17 @@
 [
     {
+        "id": "5031dfce.f7c66",
+        "type": "tab",
+        "label": "フロー 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "bacc0887.bee178",
         "type": "cos-put",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "",
-        "bucket": "tetete-donotdelete-pr-0sjtrqbjiqznak",
+        "bucket": "{!!BUCKETNAME!!}",
         "objectname": "",
         "mode": "0",
         "filepath": "/tmp/",
@@ -23,7 +30,7 @@
     {
         "id": "8d6e0972.209b68",
         "type": "template",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "写真アップロード",
         "field": "payload",
         "fieldType": "msg",
@@ -41,7 +48,7 @@
     {
         "id": "c36cd95c.d1d608",
         "type": "http in",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "[GET] /imgpost",
         "url": "/imgpost",
         "method": "get",
@@ -58,7 +65,7 @@
     {
         "id": "8de3e92e.495a58",
         "type": "http response",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "http response",
         "statusCode": "",
         "headers": {},
@@ -69,7 +76,7 @@
     {
         "id": "3e17371d.898448",
         "type": "httpInMultipart",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "[multipart]/imgpost",
         "url": "/imgpost",
         "method": "post",
@@ -86,7 +93,7 @@
     {
         "id": "4994c12a.c0419",
         "type": "function",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "ファイルパスの変換",
         "func": "msg.filename = msg.req.files['imagedata'][0]['filename'];\nmsg.filepath = msg.req.files['imagedata'][0]['destination']+'/';\nmsg.geturl = Boolean(true);\nreturn msg;",
         "outputs": 1,
@@ -100,26 +107,9 @@
         ]
     },
     {
-        "id": "cd3f4e79.531c7",
-        "type": "visual-recognition-v3",
-        "z": "37c5c041.d870e",
-        "name": "",
-        "apikey": "__PWRD__",
-        "vr-service-endpoint": "https://gateway-a.watsonplatform.net/visual-recognition/api",
-        "image-feature": "detectFaces",
-        "lang": "ja",
-        "x": 588.5,
-        "y": 576,
-        "wires": [
-            [
-                "22c16b1f.66cc84"
-            ]
-        ]
-    },
-    {
         "id": "b8b6ec59.61763",
         "type": "function",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "Call WatsonVR",
         "func": "msg.payload=msg.url;\nreturn msg;",
         "outputs": 1,
@@ -135,7 +125,7 @@
     {
         "id": "41cf67dd.9d9b28",
         "type": "http request",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "",
         "method": "GET",
         "ret": "bin",
@@ -145,14 +135,14 @@
         "y": 538,
         "wires": [
             [
-                "cd3f4e79.531c7"
+                "41f47ea0.9d9ef"
             ]
         ]
     },
     {
         "id": "22c16b1f.66cc84",
         "type": "function",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "add header",
         "func": "msg.headers = {\"content-type\":\"text/html\"};\nmsg.payload =msg.result;\nreturn msg;",
         "outputs": 1,
@@ -168,7 +158,7 @@
     {
         "id": "dd173192.ef957",
         "type": "template",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -180,14 +170,15 @@
         "y": 665,
         "wires": [
             [
-                "52d566c.037f198"
+                "52d566c.037f198",
+                "ec553314.e013d"
             ]
         ]
     },
     {
         "id": "52d566c.037f198",
         "type": "http response",
-        "z": "37c5c041.d870e",
+        "z": "5031dfce.f7c66",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -196,17 +187,48 @@
         "wires": []
     },
     {
+        "id": "41f47ea0.9d9ef",
+        "type": "visual-recognition-v3",
+        "z": "5031dfce.f7c66",
+        "name": "",
+        "apikey": "",
+        "vr-service-endpoint": "https://gateway-a.watsonplatform.net/visual-recognition/api",
+        "image-feature": "detectFaces",
+        "lang": "en",
+        "x": 590,
+        "y": 600,
+        "wires": [
+            [
+                "22c16b1f.66cc84"
+            ]
+        ]
+    },
+    {
+        "id": "ec553314.e013d",
+        "type": "debug",
+        "z": "5031dfce.f7c66",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 400,
+        "y": 800,
+        "wires": []
+    },
+    {
         "id": "1aff12e9.44ed3d",
         "type": "cos-config",
         "z": "",
-        "apiKeyId": "",
+        "apiKeyId": "{!!apikey!!}",
         "location": "us-geo",
         "ibmAuthEndpoint": "https://iam.ng.bluemix.net/oidc/token",
         "endpoint": "s3-api.us-geo.objectstorage.softlayer.net",
-        "serviceInstanceId": "ServiceId-d",
+        "serviceInstanceId": "{!!iam_serviceid_crn->ServiceId-!!}",
         "hmac": true,
-        "accesskeyid": "0a52feda5",
-        "accesskey": "51f1d828c5",
-        "name": "test"
+        "accesskeyid": "{!!cos_hmac_keys->access_key_id!!}",
+        "accesskey": "{!!cos_hmac_keys->secret_access_key!!}",
+        "name": "IBM Cloud Object Storage Settings"
     }
 ]
