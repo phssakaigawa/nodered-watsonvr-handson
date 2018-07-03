@@ -2,12 +2,18 @@ applications:
 - memory: 256M
   services:
   - sample-node-red-cloudantNoSQLDB
+  - bridge-app-watson-vr
+  - bridge-app-object-store
+
   env:
     NODE_RED_STORAGE_NAME: sample-node-red-cloudantNoSQLDB
 declared-services:
   sample-node-red-cloudantNoSQLDB:
     label: cloudantNoSQLDB
     plan:  Lite
-  visual-recognition-service:
-    label: visual-recognition
-    plan: Lite
+  bridge-app-object-store:
+    label: cloud-object-storage
+    plan:  Lite
+  bridge-app-watson-vr:
+    label: watson_vision_combined
+    plan:  Lite
