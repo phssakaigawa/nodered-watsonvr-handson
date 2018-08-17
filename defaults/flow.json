@@ -7,228 +7,915 @@
         "info": ""
     },
     {
-        "id": "bacc0887.bee178",
+        "id": "dfb4ce32.abf9f",
+        "type": "tab",
+        "label": "顔検出",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "4a6f45ed.e9d8ec",
+        "type": "tab",
+        "label": "カスタムモデル",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "25e52717.d09118",
+        "type": "tab",
+        "label": "QRコード表示用",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b564e916.084c88",
+        "type": "websocket-client",
+        "z": "",
+        "path": "wss://api.sakura.io/ws/v1/",
+        "tls": "",
+        "wholemsg": "false"
+    },
+    {
+        "id": "acc2b668.0e2228",
+        "type": "http in",
+        "z": "dfb4ce32.abf9f",
+        "name": "[GET] /imgpost",
+        "url": "/imgpost",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "4fdd6b49.2c7514"
+            ]
+        ]
+    },
+    {
+        "id": "5fbb6e4b.0ea44",
         "type": "cos-put",
-        "z": "5031dfce.f7c66",
-        "name": "",
-        "bucket": "{!!BUCKETNAME!!}",
+        "z": "dfb4ce32.abf9f",
+        "name": "cos-put",
+        "bucket": "%%bucket%%",
+        "create": "1",
         "objectname": "",
         "mode": "0",
         "filepath": "/tmp/",
         "filename": "test",
         "contentType": "image/jpeg",
         "geturl": true,
-        "cosconfig": "1aff12e9.44ed3d",
-        "x": 570,
-        "y": 120,
+        "cosconfig": "",
+        "x": 560,
+        "y": 180,
         "wires": [
             [
-                "b8b6ec59.61763"
+                "707ca423.222f6c"
             ]
         ]
     },
     {
-        "id": "8d6e0972.209b68",
+        "id": "4fdd6b49.2c7514",
         "type": "template",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
         "name": "写真アップロード",
         "field": "payload",
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
         "template": "<html>\n<head><title>Watson Visual Recognition on IBMCloud Node-RED</title></head>\n<body>\n<h1>Watson Visual Recognition on IBMCloud Node-RED</h1>\n<h2>Select an image file</h2>\n<form  action=\"/imgpost\" method=\"post\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"imagedata\" accept=\"image/*\"  />\n    <input type=\"submit\" value=\"Analyze\"/>\n</form>\n</body>\n</html>",
-        "x": 330,
-        "y": 40,
+        "x": 350,
+        "y": 80,
         "wires": [
             [
-                "8de3e92e.495a58"
+                "2d62a292.f55cae"
             ]
         ]
     },
     {
-        "id": "c36cd95c.d1d608",
-        "type": "http in",
-        "z": "5031dfce.f7c66",
-        "name": "[GET] /imgpost",
-        "url": "/imgpost",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 100,
-        "y": 40,
-        "wires": [
-            [
-                "8d6e0972.209b68"
-            ]
-        ]
-    },
-    {
-        "id": "8de3e92e.495a58",
+        "id": "2d62a292.f55cae",
         "type": "http response",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
         "name": "http response",
         "statusCode": "",
         "headers": {},
-        "x": 539.5,
-        "y": 40,
+        "x": 579.5,
+        "y": 80,
         "wires": []
     },
     {
-        "id": "3e17371d.898448",
+        "id": "538ad6fc.114828",
         "type": "httpInMultipart",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
         "name": "[multipart]/imgpost",
         "url": "/imgpost",
         "method": "post",
         "fields": "[ { \"name\": \"imagedata\"} ]",
         "swaggerDoc": "",
-        "x": 110,
-        "y": 120,
-        "wires": [
-            [
-                "4994c12a.c0419"
-            ]
-        ]
-    },
-    {
-        "id": "4994c12a.c0419",
-        "type": "function",
-        "z": "5031dfce.f7c66",
-        "name": "ファイルパスの変換",
-        "func": "msg.filename = msg.req.files['imagedata'][0]['filename'];\nmsg.filepath = msg.req.files['imagedata'][0]['destination']+'/';\nmsg.geturl = Boolean(true);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 340,
-        "y": 120,
-        "wires": [
-            [
-                "bacc0887.bee178"
-            ]
-        ]
-    },
-    {
-        "id": "b8b6ec59.61763",
-        "type": "function",
-        "z": "5031dfce.f7c66",
-        "name": "Call WatsonVR",
-        "func": "msg.payload=msg.url;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 320,
+        "x": 130,
         "y": 180,
         "wires": [
             [
-                "41cf67dd.9d9b28"
+                "b4e4e739.98d758"
             ]
         ]
     },
     {
-        "id": "41cf67dd.9d9b28",
+        "id": "b4e4e739.98d758",
+        "type": "function",
+        "z": "dfb4ce32.abf9f",
+        "name": "ファイルパス変換",
+        "func": "msg.filename = msg.req.files['imagedata'][0]['filename'];\nmsg.filepath = msg.req.files['imagedata'][0]['destination']+'/';\nmsg.geturl = Boolean(true);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "5fbb6e4b.0ea44"
+            ]
+        ]
+    },
+    {
+        "id": "707ca423.222f6c",
+        "type": "function",
+        "z": "dfb4ce32.abf9f",
+        "name": "call_WatsonVR",
+        "func": "msg.payload=msg.url;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 180,
+        "wires": [
+            [
+                "e51fb02c.57e5"
+            ]
+        ]
+    },
+    {
+        "id": "e51fb02c.57e5",
         "type": "http request",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
         "name": "",
         "method": "GET",
         "ret": "bin",
         "url": "",
         "tls": "",
-        "x": 530,
+        "x": 1070,
         "y": 180,
         "wires": [
             [
-                "41f47ea0.9d9ef"
+                "c7f8485.f7962b8"
             ]
         ]
     },
     {
-        "id": "22c16b1f.66cc84",
+        "id": "fb22d2f9.e5521",
         "type": "function",
-        "z": "5031dfce.f7c66",
-        "name": "add header",
+        "z": "dfb4ce32.abf9f",
+        "name": "add_header",
         "func": "msg.headers = {\"content-type\":\"text/html\"};\nmsg.payload =msg.result;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 310,
-        "y": 300,
+        "x": 570,
+        "y": 340,
         "wires": [
             [
-                "dd173192.ef957"
+                "f348b838.182d68"
             ]
         ]
     },
     {
-        "id": "dd173192.ef957",
+        "id": "f348b838.182d68",
         "type": "template",
-        "z": "5031dfce.f7c66",
-        "name": "",
+        "z": "dfb4ce32.abf9f",
+        "name": "顔検出成功",
         "field": "payload",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n    {{#faces}}\n        <br><b>年齢</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Max</th><th>Min</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#age}}\n                    <tr><td>{{max}}</td><td>{{min}}</td><td>{{score}}</td></tr>\n                {{/age}} \n            </tbody>\n        </table>\n        <br><b>性別</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Gender</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#gender}}\n                    <tr><td>{{gender}}</td><td>{{score}}</td></tr>\n                {{/gender}} \n            </tbody>\n        </table>\n        <br><b>該当者</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Name</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#identity}}\n                    <tr><td>{{name}}</td><td>{{score}}</td></tr>\n                {{/identity}} \n            </tbody>\n        </table>\n    {{/faces}}\n    {{/images}}    \n{{/result}}",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n    {{#faces}}\n        <h2>顔として認識できました</h2>\n        <br><b>年齢</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Max</th><th>Min</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#age}}\n                    <tr><td>{{max}}</td><td>{{min}}</td><td>{{score}}</td></tr>\n                {{/age}} \n            </tbody>\n        </table>\n        <br><b>性別</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Gender</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#gender}}\n                    <tr><td>{{gender}}</td><td>{{score}}</td></tr>\n                {{/gender}} \n            </tbody>\n        </table>\n        <br><b>該当者</b>\n        <table border='1'>\n            <thead>\n                <tr><th>Name</th><th>Score</th></tr>\n            </thead>\n            <tbody>\n                {{#identity}}\n                    <tr><td>{{name}}</td><td>{{score}}</td></tr>\n                {{/identity}} \n            </tbody>\n        </table>\n    {{/faces}}\n    {{/images}}    \n{{/result}}",
         "output": "str",
-        "x": 520,
-        "y": 300,
+        "x": 790,
+        "y": 340,
         "wires": [
             [
-                "52d566c.037f198",
-                "ec553314.e013d"
+                "c2805264.b0db2"
             ]
         ]
     },
     {
-        "id": "52d566c.037f198",
+        "id": "c2805264.b0db2",
         "type": "http response",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 510,
-        "y": 360,
+        "x": 1050,
+        "y": 340,
         "wires": []
     },
     {
-        "id": "41f47ea0.9d9ef",
+        "id": "c7f8485.f7962b8",
         "type": "visual-recognition-v3",
-        "z": "5031dfce.f7c66",
-        "name": "",
+        "z": "dfb4ce32.abf9f",
+        "name": "VR（Detect Faces）",
         "apikey": "",
         "vr-service-endpoint": "https://gateway-a.watsonplatform.net/visual-recognition/api",
         "image-feature": "detectFaces",
         "lang": "en",
-        "x": 330,
-        "y": 240,
+        "x": 360,
+        "y": 260,
         "wires": [
             [
-                "22c16b1f.66cc84"
+                "9e4fb559.e25b28",
+                "d791a0c2.9d6c3"
             ]
         ]
     },
     {
-        "id": "ec553314.e013d",
+        "id": "9e4fb559.e25b28",
+        "type": "switch",
+        "z": "dfb4ce32.abf9f",
+        "name": "検知判定",
+        "property": "msg.result.images[-1].faces[-1].gender[-1]",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "istype",
+                "v": "object",
+                "vt": "object"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "fb22d2f9.e5521"
+            ],
+            [
+                "a1a0d7a.e5e7f28"
+            ]
+        ]
+    },
+    {
+        "id": "77eb57cf.0bcfc8",
+        "type": "template",
+        "z": "dfb4ce32.abf9f",
+        "name": "顔検出失敗",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n        <h2>顔として認識できませんでした</h2>\n    {{/images}}    \n{{/result}}",
+        "output": "str",
+        "x": 790,
+        "y": 380,
+        "wires": [
+            [
+                "94897a6c.cafc08"
+            ]
+        ]
+    },
+    {
+        "id": "94897a6c.cafc08",
+        "type": "http response",
+        "z": "dfb4ce32.abf9f",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "9506a6ec.5ac458",
+        "type": "comment",
+        "z": "dfb4ce32.abf9f",
+        "name": "アップロード画面",
+        "info": "",
+        "x": 110,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "972f826.af3fa8",
+        "type": "comment",
+        "z": "dfb4ce32.abf9f",
+        "name": "写真判定画面",
+        "info": "",
+        "x": 90,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d791a0c2.9d6c3",
         "type": "debug",
-        "z": "5031dfce.f7c66",
+        "z": "dfb4ce32.abf9f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 550,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "a1a0d7a.e5e7f28",
+        "type": "function",
+        "z": "dfb4ce32.abf9f",
+        "name": "add header",
+        "func": "msg.headers = {\"content-type\":\"text/html\"};\nmsg.payload =msg.result;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 570,
+        "y": 380,
+        "wires": [
+            [
+                "77eb57cf.0bcfc8"
+            ]
+        ]
+    },
+    {
+        "id": "c70598ac.289578",
+        "type": "http in",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "[GET] /imgpost",
+        "url": "/imgpost",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "57f1126d.b7283c"
+            ]
+        ]
+    },
+    {
+        "id": "a73ddaca.f02838",
+        "type": "cos-put",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "cos-put",
+        "bucket": "%%bucket%%",
+        "create": "1",
+        "objectname": "",
+        "mode": "0",
+        "filepath": "/tmp/",
+        "filename": "test",
+        "contentType": "image/jpeg",
+        "geturl": true,
+        "cosconfig": "",
+        "x": 560,
+        "y": 180,
+        "wires": [
+            [
+                "3c228e65.7d4202"
+            ]
+        ]
+    },
+    {
+        "id": "57f1126d.b7283c",
+        "type": "template",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "写真アップロード",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<html>\n<head><title>Watson Visual Recognition on IBMCloud Node-RED</title></head>\n<body>\n<h1>Watson Visual Recognition on IBMCloud Node-RED</h1>\n<h2>Select an image file</h2>\n<form  action=\"/imgpost\" method=\"post\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"imagedata\" accept=\"image/*\"  />\n    <input type=\"submit\" value=\"Analyze\"/>\n</form>\n</body>\n</html>",
+        "x": 350,
+        "y": 80,
+        "wires": [
+            [
+                "b65cc81d.0e7f48"
+            ]
+        ]
+    },
+    {
+        "id": "b65cc81d.0e7f48",
+        "type": "http response",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "http response",
+        "statusCode": "",
+        "headers": {},
+        "x": 579.5,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a7cb9899.c6f1f8",
+        "type": "httpInMultipart",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "[multipart]/imgpost",
+        "url": "/imgpost",
+        "method": "post",
+        "fields": "[ { \"name\": \"imagedata\"} ]",
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "1e11b79b.24a8c8"
+            ]
+        ]
+    },
+    {
+        "id": "1e11b79b.24a8c8",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "ファイルパス変換",
+        "func": "msg.filename = msg.req.files['imagedata'][0]['filename'];\nmsg.filepath = msg.req.files['imagedata'][0]['destination']+'/';\nmsg.geturl = Boolean(true);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "a73ddaca.f02838"
+            ]
+        ]
+    },
+    {
+        "id": "3c228e65.7d4202",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "call_WatsonVR（Custom）",
+        "func": "msg.payload=msg.url;\nmsg.params = {};\nmsg.params.classifier_ids = \"%%modelID%%\";\nmsg.params.threshould = \"0\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 840,
+        "y": 180,
+        "wires": [
+            [
+                "95c67e0f.aebc9"
+            ]
+        ]
+    },
+    {
+        "id": "95c67e0f.aebc9",
+        "type": "http request",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "url": "",
+        "tls": "",
+        "x": 1070,
+        "y": 180,
+        "wires": [
+            [
+                "7ff71ee5.edddf"
+            ]
+        ]
+    },
+    {
+        "id": "f45162c7.2a6d",
+        "type": "template",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "判定成功（pig-black）",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n        {{#classifiers}}\n            Class is match!!\n            <table>\n            {{#classes}}\n            <tr>\n                <td>Class:</td>\n                <td>{{class}}</td>\n            </tr>\n            <tr>\n                <td>Score:</td>\n                <td>{{score}}</td>\n            </tr>\n            {{/classes}}\n            </table>\n        {{/classifiers}}\n    {{/images}}    \n{{/result}}",
+        "output": "str",
+        "x": 820,
+        "y": 420,
+        "wires": [
+            [
+                "e731751a.9358e8",
+                "97069397.c224c"
+            ]
+        ]
+    },
+    {
+        "id": "e731751a.9358e8",
+        "type": "http response",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "7ff71ee5.edddf",
+        "type": "visual-recognition-v3",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "VR（Classify）",
+        "apikey": "",
+        "vr-service-endpoint": "https://gateway-a.watsonplatform.net/visual-recognition/api",
+        "image-feature": "classifyImage",
+        "lang": "en",
+        "x": 340,
+        "y": 260,
+        "wires": [
+            [
+                "16d9ba5e.b3a266",
+                "931c7a13.cd40c8"
+            ]
+        ]
+    },
+    {
+        "id": "d47b4f7c.84e4c",
+        "type": "switch",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "判定結果分岐",
+        "property": "msg.result.images[-1].classifiers[-1].classes[-1].class",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "bear",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pigblack",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 580,
+        "y": 340,
+        "wires": [
+            [
+                "e8a2f363.f5b71"
+            ],
+            [
+                "f45162c7.2a6d"
+            ]
+        ]
+    },
+    {
+        "id": "e8a2f363.f5b71",
+        "type": "template",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "判定成功（bear）",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n        {{#classifiers}}\n            Class is match!!\n            <table>\n            {{#classes}}\n            <tr>\n                <td>Class:</td>\n                <td>{{class}}</td>\n            </tr>\n            <tr>\n                <td>Score:</td>\n                <td>{{score}}</td>\n            </tr>\n            {{/classes}}\n            </table>\n        {{/classifiers}}\n    {{/images}}    \n{{/result}}",
+        "output": "str",
+        "x": 810,
+        "y": 340,
+        "wires": [
+            [
+                "6bf10334.de4f5c",
+                "c4a2c29e.428f"
+            ]
+        ]
+    },
+    {
+        "id": "6bf10334.de4f5c",
+        "type": "http response",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "18130fb.59f08f",
+        "type": "comment",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "アップロード画面",
+        "info": "",
+        "x": 110,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "9d63b7e7.ffbe38",
+        "type": "comment",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "写真判定画面＆デバイス制御（動作部分）",
+        "info": "",
+        "x": 180,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e93054f2.46b3c8",
+        "type": "websocket out",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "sakuraio_out",
+        "server": "",
+        "client": "b564e916.084c88",
+        "x": 1330,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "c5b8837f.0368b",
+        "type": "debug",
+        "z": "4a6f45ed.e9d8ec",
         "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 690,
-        "y": 300,
+        "x": 1330,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "1aff12e9.44ed3d",
-        "type": "cos-config",
-        "z": "",
-        "apiKeyId": "{!!apikey!!}",
-        "location": "us-geo",
-        "ibmAuthEndpoint": "https://iam.ng.bluemix.net/oidc/token",
-        "endpoint": "s3-api.us-geo.objectstorage.softlayer.net",
-        "serviceInstanceId": "{!!iam_serviceid_crn->ServiceId-!!}",
-        "hmac": true,
-        "accesskeyid": "{!!cos_hmac_keys->access_key_id!!}",
-        "accesskey": "{!!cos_hmac_keys->secret_access_key!!}",
-        "name": "IBM Cloud Object Storage Settings"
+        "id": "9f69f770.c00698",
+        "type": "comment",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "デバイス制御（モジュールID指定と制御用JSONデータの定義）",
+        "info": "",
+        "x": 250,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "5d69a4fc.17d2bc",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "moduleID_set",
+        "func": "//context.global.moduleに制御対象のモジュールIDを指定\ncontext.global.module = \"%%moduleID%%\";\n\nmsg.payload = context.global.module;\nreturn msg;",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 340,
+        "y": 720,
+        "wires": [
+            [
+                "676c3583.c29d7c"
+            ]
+        ]
+    },
+    {
+        "id": "322958ab.5760b8",
+        "type": "inject",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "x": 130,
+        "y": 720,
+        "wires": [
+            [
+                "5d69a4fc.17d2bc"
+            ]
+        ]
+    },
+    {
+        "id": "1f5b63a2.66633c",
+        "type": "debug",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 790,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "676c3583.c29d7c",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "JSON_set",
+        "func": "context.global.match = {\n    \"module\": context.global.module,\n    \"type\": \"channels\",\n    \"payload\": {\n        \"channels\": [\n            {\n                \"channel\": 0,\n                \"type\": \"I\",\n                \"value\": 1\n            },\n            {\n                \"channel\": 1,\n                \"type\": \"I\",\n                \"value\": 0\n            }\n        ]\n    }\n};\ncontext.global.unmatch = {\n    \"module\": context.global.module,\n    \"type\": \"channels\",\n    \"payload\": {\n        \"channels\": [\n            {\n                \"channel\": 0,\n                \"type\": \"I\",\n                \"value\": 0\n            },\n            {\n                \"channel\": 1,\n                \"type\": \"I\",\n                \"value\": 1\n            }\n        ]\n    }\n};\ncontext.global.unknown = {\n    \"module\": context.global.module,\n    \"type\": \"channels\",\n    \"payload\": {\n        \"channels\": [\n            {\n                \"channel\": 0,\n                \"type\": \"I\",\n                \"value\": 0\n            },\n            {\n                \"channel\": 1,\n                \"type\": \"I\",\n                \"value\": 0\n            }\n        ]\n    }\n};\nreturn [\n    {payload:context.global.match},\n    {payload:context.global.unmatch},\n    {payload:context.global.unknown}\n];",
+        "outputs": 3,
+        "noerr": 0,
+        "x": 570,
+        "y": 720,
+        "wires": [
+            [
+                "1f5b63a2.66633c"
+            ],
+            [
+                "1f5b63a2.66633c"
+            ],
+            [
+                "1f5b63a2.66633c"
+            ]
+        ]
+    },
+    {
+        "id": "7f7a9a6d.f5c824",
+        "type": "template",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "判定失敗（unknown）",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Watson Visual Recognition on IBM Cloud Node-RED</h1>\n{{#result}}\n    {{#images}}\n        <div><img src=\"{{url}}\" height='300'/></div><br>\n        {{#classifiers}}\n            Class is no match :-(\n            <table>\n            {{#classes}}\n            <tr>\n                <td>Class:</td>\n                <td>{{class}}</td>\n            </tr>\n            <tr>\n                <td>Score:</td>\n                <td>{{score}}</td>\n            </tr>\n            {{/classes}}\n            </table>\n        {{/classifiers}}\n    {{/images}}    \n{{/result}}",
+        "output": "str",
+        "x": 820,
+        "y": 500,
+        "wires": [
+            [
+                "42161d23.d4aa64",
+                "8a60a642.acd748"
+            ]
+        ]
+    },
+    {
+        "id": "c4a2c29e.428f",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "LED点灯（bear）",
+        "func": "msg.payload = context.global.match;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1090,
+        "y": 380,
+        "wires": [
+            [
+                "e93054f2.46b3c8",
+                "c5b8837f.0368b"
+            ]
+        ]
+    },
+    {
+        "id": "97069397.c224c",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "LED点灯（pig-black）",
+        "func": "msg.payload = context.global.unmatch;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1100,
+        "y": 460,
+        "wires": [
+            [
+                "e93054f2.46b3c8",
+                "c5b8837f.0368b"
+            ]
+        ]
+    },
+    {
+        "id": "42161d23.d4aa64",
+        "type": "http response",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "8a60a642.acd748",
+        "type": "function",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "LED点灯（unknown）",
+        "func": "msg.payload = context.global.unknown;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1100,
+        "y": 540,
+        "wires": [
+            [
+                "e93054f2.46b3c8",
+                "c5b8837f.0368b"
+            ]
+        ]
+    },
+    {
+        "id": "16d9ba5e.b3a266",
+        "type": "debug",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 550,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "931c7a13.cd40c8",
+        "type": "switch",
+        "z": "4a6f45ed.e9d8ec",
+        "name": "検知数分岐",
+        "property": "$count(msg.result.images[-1].classifiers[-1].classes)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "neq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "d47b4f7c.84e4c"
+            ],
+            [
+                "7f7a9a6d.f5c824"
+            ]
+        ]
+    },
+    {
+        "id": "2dfc5545.e2683a",
+        "type": "http in",
+        "z": "25e52717.d09118",
+        "name": "",
+        "url": "/qrcode",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 80,
+        "wires": [
+            [
+                "c0a25dd.2df34a"
+            ]
+        ]
+    },
+    {
+        "id": "c0a25dd.2df34a",
+        "type": "function",
+        "z": "25e52717.d09118",
+        "name": "URL生成",
+        "func": "msg.url=\"https://\" + msg.req.host + \"/imgpost\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 280,
+        "y": 80,
+        "wires": [
+            [
+                "27342588.f0f2fa"
+            ]
+        ]
+    },
+    {
+        "id": "27342588.f0f2fa",
+        "type": "template",
+        "z": "25e52717.d09118",
+        "name": "IMGタグ表示",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<img src=\"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{url}}\">",
+        "output": "str",
+        "x": 470,
+        "y": 80,
+        "wires": [
+            [
+                "8b277c99.d7bf4"
+            ]
+        ]
+    },
+    {
+        "id": "8b277c99.d7bf4",
+        "type": "http response",
+        "z": "25e52717.d09118",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "25f59a82.1f5b16",
+        "type": "comment",
+        "z": "25e52717.d09118",
+        "name": "QRコードの表示",
+        "info": "",
+        "x": 100,
+        "y": 40,
+        "wires": []
     }
 ]
